@@ -18,7 +18,7 @@ namespace GeoSOT
             var minutes = (latitude - degrees) * 60;
             var seconds = ((minutes - (int)minutes) * 60);
             return string.Format("{0}° {1}' {2}\" {3}",
-                Math.Abs(degrees), Math.Abs((int)minutes), 
+                Math.Abs(degrees), Math.Abs((int)minutes),
                 Math.Round(Math.Abs(seconds), 4),
                 degrees < 0 ? "S" : "N");
         }
@@ -40,24 +40,17 @@ namespace GeoSOT
         /// <returns></returns>
         public double GetLat(string latDMS)
         {
-            Dim degrees As Double
-   Dim minutes As Double
-   Dim seconds As Double
-   ' Set degree to value before "°" of Argument Passed.
-   degrees = Val(Left(Degree_Deg, InStr(1, Degree_Deg, "°") - 1))
-   ' Set minutes to the value between the "°" and the "'"
-   ' of the text string for the variable Degree_Deg divided by
-   ' 60. The Val function converts the text string to a number.
-   minutes = Val(Mid(Degree_Deg, InStr(1, Degree_Deg, "°") + 2, _
-             InStr(1, Degree_Deg, "'") - InStr(1, Degree_Deg, _
-             "°") - 2)) / 60
-    ' Set seconds to the number to the right of "'" that is
-    ' converted to a value and then divided by 3600.
-    seconds = Val(Mid(Degree_Deg, InStr(1, Degree_Deg, "'") + _
-            2, Len(Degree_Deg) - InStr(1, Degree_Deg, "'") - 2)) _
-            / 3600
-   Convert_Decimal = degrees + minutes + seconds
-            throw new NotImplementedException();
+            var list = latDMS.Split(new char[] { '°', '\'', '\"' });
+            var degrees = double.Parse(list[0].Trim(' '));
+            var minutes = double.Parse(list[1].Trim(' ')) / 60;
+            var seconds = double.Parse(list[2].Trim(' ')) / 3600;
+            var isNegative = string.Equals(list[3].Trim(' '), "S");
+            var result = degrees + minutes + seconds;
+            if (isNegative)
+            {
+                result = -result;
+            }
+            return Math.Round(result, 7);
         }
 
         /// <summary>
