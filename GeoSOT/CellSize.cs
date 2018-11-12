@@ -5,22 +5,27 @@ namespace GeoSOT
     public class CellSize
     {
         /// <summary>
-        /// 获取level级别的分块大小,单位为经纬度
+        /// 获取第i级[0,32]的分块大小,单位为度
         /// </summary>
-        /// <param name="level"></param>
+        /// <param name="i">层级</param>
         /// <returns></returns>
-        public double GetCellSize(int level)
+        public double GetCellSizeInDegree(int i)
         {
-            double cellSize = 0;
-            if (level >= 0 && level <= 9)
+            if (i >= 0 && i <= 9)
             {
-                cellSize = Math.Pow(2, 9 - level);
+                return Math.Pow(2, 9 - i);
             }
-            else
+            if (i >= 10 && i <= 15)
             {
-                throw new NotImplementedException();
+                return Math.Pow(2, 15 - i) / 60;
             }
-            return cellSize;
+            if (i >= 16 && i <= 32)
+            {
+                return Math.Pow(2, 21 - i) / 3600;
+            }
+
+            // if (i < 0 || i > 32)
+            throw new ArgumentException();
         }
     }
 }
