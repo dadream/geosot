@@ -7,68 +7,92 @@ namespace GeoSOT
     public class TileUtils
     {
         /// <summary>
-        /// 将十进制纬度转换为度分秒表达
-        /// 其中，秒按四舍五入保留4位小数
+        /// 将十进制经纬度转换为DMS字符串表达，秒保留4位精度
+        /// </summary>
+        /// <param name="dd">十进制经纬度</param>
+        /// <returns>dms字符串</returns>
+        private string DecimalDgreeToDMS(double dd, int precision = 4)
+        {
+            var degrees = (int)dd;
+            var minutes = (dd - degrees) * 60;
+            var seconds = ((minutes - (int)minutes) * 60);
+            return string.Format("{0}° {1}' {2}\"",
+                Math.Abs(degrees), Math.Abs((int)minutes),
+                Math.Round(Math.Abs(seconds), precision));
+        }
+
+        /// <summary>
+        /// 将DMS字符串转换为十进制经纬度，保留6位精度
+        /// </summary>
+        /// <param name="dms"></param>
+        /// <returns></returns>
+        private double DMSToDecimalDgree(string dms, int precision = 6)
+        {
+            var list = dms.Split(new char[] { '°', '\'', '\"' });
+            var degrees = double.Parse(list[0].Trim(' '));
+            var minutes = double.Parse(list[1].Trim(' ')) / 60;
+            var seconds = double.Parse(list[2].Trim(' ')) / 3600;
+            return Math.Round(degrees + minutes + seconds, precision);
+        }
+
+        /// <summary>
+        /// 纬度转换为度分秒
         /// </summary>
         /// <param name="latitude">维度</param>
         /// <returns>*度*分*秒</returns>
         public string GetLatDMS(double latitude)
         {
-            var degrees = (int)latitude;
-            var minutes = (latitude - degrees) * 60;
-            var seconds = ((minutes - (int)minutes) * 60);
-            return string.Format("{0}° {1}' {2}\" {3}",
-                Math.Abs(degrees), Math.Abs((int)minutes),
-                Math.Round(Math.Abs(seconds), 4),
-                degrees < 0 ? "S" : "N");
+            var dms = DecimalDgreeToDMS(latitude);
+            return string.Format("{0} {1}",
+                dms, latitude < 0 ? "S" : "N");
         }
 
         /// <summary>
-        /// 将十进制经度转换为度分秒表达
+        /// 经度转换为度分秒
         /// </summary>
         /// <param name="longitude">经度</param>
         /// <returns>*度*分*秒</returns>
         public string GetLongDMS(double longitude)
         {
-            throw new NotImplementedException();
+            var dms = DecimalDgreeToDMS(longitude);
+            return string.Format("{0} {1}",
+                dms, longitude < 0 ? "W" : "E");
         }
 
         /// <summary>
-        /// 将度分秒维度转换为十进制表达
+        /// 度分秒维度转换为十进制度
         /// </summary>
         /// <param name="lat"></param>
         /// <returns></returns>
-        public double GetLat(string latDMS)
+        public double GetLat(string dms)
         {
-            var list = latDMS.Split(new char[] { '°', '\'', '\"' });
-            var degrees = double.Parse(list[0].Trim(' '));
-            var minutes = double.Parse(list[1].Trim(' ')) / 60;
-            var seconds = double.Parse(list[2].Trim(' ')) / 3600;
-            var isNegative = string.Equals(list[3].Trim(' '), "S");
-            var result = degrees + minutes + seconds;
-            if (isNegative)
-            {
-                result = -result;
-            }
-            return Math.Round(result, 7);
+            var result = DMSToDecimalDgree(dms);
+            if (dms.IndexOf("S") >= 0) { result = -result; }
+            else if (dms.IndexOf("N") >= 0) { }
+            else { throw new ArgumentException(); }
+            return result;
         }
 
         /// <summary>
-        /// 将度分秒经度转换为十进制表达
+        /// 度分秒经度转换为十进制度
         /// </summary>
-        /// <param name="long">经度</param>
+        /// <param name="dms"></param>
         /// <returns></returns>
-        public double GetLong(string longDMS)
+        public double GetLon(string dms)
+        {
+            var result = DMSToDecimalDgree(dms);
+            if (dms.IndexOf("W") >= 0) { result = -result; }
+            else if (dms.IndexOf("E") >= 0) { }
+            else { throw new ArgumentException(); }
+            return result;
+        }
+
+        public Int32 EncodeLat(double lat)
         {
             throw new NotImplementedException();
         }
 
-        public Int32 EncodeLat(double latitude)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Int32 EncodeLong(double Longitude)
+        public Int32 EncodeLon(double lon)
         {
             throw new NotImplementedException();
         }
