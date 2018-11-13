@@ -38,5 +38,20 @@ namespace GeoSOT.xUnitTests
             //Assert
             Assert.Equal(expected, actual);
         }
+
+        [Theory]
+        [InlineData(-12.345678, "-12-20-44")]
+        [InlineData(12.345678, "12-20-44")]
+        public void Code(double input, string expected)
+        {
+            //Arrange
+            var _segmetns = new LngLatSegments(input);
+
+            //Act
+            var actual = _segmetns.ToString();
+
+            //Assert
+            Assert.Equal(expected, actual);
+        }
     }
 }

@@ -91,20 +91,22 @@ namespace GeoSOT
 
         #endregion
 
+        #region 经纬度与1d/2d编码转换
+
         public UInt32 EncodeLngLat(double x)
         {
             var segs = new LngLatSegments(x);
             return segs.G << 31 | segs.D << 23 | segs.M << 17 | segs.S << 11 | segs.S11;
         }
 
-        public double DecodeLngLat(UInt32 x)
+        public LngLatSegments DecodeLngLat(UInt32 x)
         {
             UInt32 G = x >> 31; // 1b
             UInt32 D = (x >> 23) & 0xFF; // 8b
             UInt32 M = (x >> 17) & 0x3F; // 6b
             UInt32 S = (x >> 11) & 0x3F; // 6b
             UInt32 S11 = x & 0x7FF; // 11b
-            var segs = new LngLatSegments
+            return new LngLatSegments
             {
                 G = G,
                 D = D,
@@ -112,18 +114,9 @@ namespace GeoSOT
                 S = S,
                 S11 = S11
             };
-            return segs.Degree;
         }
 
-        /// <summary>
-        /// 北京世纪坛（39°54′37″N，116°18′54″E）
-        /// 第 9 级其剖分编码为（ 39,116 ）
-        /// 第 15 级为（ 39-54,116-18 ）
-        /// 第 21 级为（39-54-37,116-18-54）
-        /// </summary>
-        /// <param name="lat"></param>
-        /// <param name="lon"></param>
-        /// <returns></returns>
+        
         public UInt64 EncodeLngLat(double lat, double lng)
         {
             var morton = new Morton2D();
@@ -138,23 +131,29 @@ namespace GeoSOT
             UInt32 L = 0;
             UInt32 B = 0;
             morton.Magicbits(code, ref L, ref B);
-            lng = DecodeLngLat(L);
-            lat = DecodeLngLat(B);
+            lng = DecodeLngLat(L).Degree;
+            lat = DecodeLngLat(B).Degree;
         }
 
-        public Int32 GetLatId(Int64 quadKey)
-        {
-            throw new NotImplementedException();
-        }
+        #endregion
 
-        public Int32 GetLngId(Int64 quadKey)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Int64 Get1DId(Int32 latKey, Int32 lonKey)
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// 北京世纪坛（39°54′37″N，116°18′54″E）
+        /// 第 9 级其剖分编码为（ 39,116 ）
+        /// 第 15 级为（ 39-54,116-18 ）
+        /// 第 21 级为（39-54-37,116-18-54）
+        /// </summary>
+        /// <param name="lat"></param>
+        /// <param name="lon"></param>
+        /// <returns></returns>
+        //public string GetLngLatCode(double x)
+        //{
+        //    var code = EncodeLngLat(x);
+        //    UInt32 G = code >> 31; // 1b
+        //    UInt32 D = (code >> 23) & 0xFF; // 8b
+        //    UInt32 M = (code >> 17) & 0x3F; // 6b
+        //    UInt32 S = (code >> 11) & 0x3F; // 6b
+        //    UInt32 S11 = code & 0x7FF; // 11b
+        //}
     }
 }

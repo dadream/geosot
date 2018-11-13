@@ -27,7 +27,7 @@ namespace GeoSOT
             {
                 var s11 = Math.Round(this.S11 / 2048.0, SecondPresion);
                 var degree = Math.Round(this.D + this.M / 60.0 + (this.S + s11) / 3600.0, DegreePresion);
-                if(this.G > 0)
+                if (this.G > 0)
                 {
                     degree = -degree;
                 }
@@ -48,6 +48,12 @@ namespace GeoSOT
             S = (UInt32)Seconds;
             var dotSeconds = (Seconds - S) * 2048;
             S11 = (UInt32)dotSeconds;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}{1}-{2}-{3}", 
+                this.G == 1 ? "-" : "", this.D, this.M, this.S);
         }
     }
 }
