@@ -112,5 +112,24 @@ namespace GeoSOT.xUnitTests
             //Assert
             Assert.Equal(expected, actual);
         }
+
+        [Theory]
+        [InlineData(12.345678, 12.345678)] // 12° 20' 44"
+        [InlineData(-12.345678, -12.345678)] // 12° 20' 44"
+        public void DecodeLngLat(double inputLat, double inputLng)
+        {
+            //Arrange
+            var _tileUtils = new TileUtils();
+
+            //Act
+            var code = _tileUtils.EncodeLngLat(inputLat, inputLng);
+            double expectedLat = 0;
+            double expectedLng = 0;
+            _tileUtils.DecodeLngLat(code, ref expectedLat, ref expectedLng);
+
+            //Assert
+            Assert.Equal(expectedLat, inputLat);
+            Assert.Equal(expectedLng, inputLng);
+        }
     }
 }

@@ -12,7 +12,7 @@ namespace GeoSOT
     public class Morton2D
     {
         // public static List<UInt32> magicbit2D_masks32 = new List<UInt32> { 0xFFFFFFFF, 0x0000FFFF, 0x00FF00FF, 0x0F0F0F0F, 0x33333333, 0x55555555 };
-        public static List<UInt64> magicbit2D_masks64 = new List<UInt64> { 0x00000000FFFFFFFF, 0x0000FFFF0000FFFF, 0x00FF00FF00FF00FF, 0x0F0F0F0F0F0F0F0F, 0x3333333333333333, 0x5555555555555555 };
+        private List<UInt64> magicbit2D_masks64 = new List<UInt64> { 0x00000000FFFFFFFF, 0x0000FFFF0000FFFF, 0x00FF00FF00FF00FF, 0x0F0F0F0F0F0F0F0F, 0x3333333333333333, 0x5555555555555555 };
 
         // HELPER METHOD for Magic bits encoding - split by 2
         private UInt64 SplitBy2Bits(UInt32 a)
@@ -41,15 +41,15 @@ namespace GeoSOT
             return (UInt32)x;
         }
 
-        public UInt64 Magicbits(UInt32 x, UInt32 y)
+        public UInt64 Magicbits(uint l, UInt32 b)
         {
-            return SplitBy2Bits(x) | (SplitBy2Bits(y) << 1);
+            return SplitBy2Bits(l) | (SplitBy2Bits(b) << 1);
         }
 
-        public void Magicbits(UInt64 m, ref UInt32 x, ref UInt32 y)
+        public void Magicbits(UInt64 m, ref UInt32 l, ref UInt32 b)
         {
-            x = GetSecondBits(m);
-            y = GetSecondBits(m >> 1);
+            l = GetSecondBits(m);
+            b = GetSecondBits(m >> 1);
         }
     }
 }
