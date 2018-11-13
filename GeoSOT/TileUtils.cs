@@ -91,17 +91,12 @@ namespace GeoSOT
 
         #endregion
 
-        public Int32 EncodeLat(double lat)
-        {
-            throw new NotImplementedException();
-            //var segs = new LngLatSegments(lat);
 
-            //return segs.G << 31 & segs.D << 23 & segs.M << 17 & segs.S << 11 & segs.S11;
-        }
 
-        public Int32 EncodeLng(double lng)
+        public Int32 EncodeLngLat(double lat)
         {
-            throw new NotImplementedException();
+            var segs = new LngLatSegments(lat);
+            return segs.G << 31 | segs.D << 23 | segs.M << 17 | segs.S << 11 | segs.S11;
         }
 
         public double DecodeLat(Int32 latKey)
