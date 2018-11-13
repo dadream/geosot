@@ -31,7 +31,7 @@ namespace GeoSOT.xUnitTests
             var _tileUtils = new TileUtils();
 
             //Act
-            var actual = _tileUtils.GetLongDMS(input);
+            var actual = _tileUtils.GetLngDMS(input);
 
             //Assert
             Assert.Equal(expected, actual);
@@ -61,7 +61,7 @@ namespace GeoSOT.xUnitTests
             var _tileUtils = new TileUtils();
 
             //Act
-            var actual = _tileUtils.GetLon(input);
+            var actual = _tileUtils.GetLng(input);
 
             //Assert
             Assert.Equal(expected, actual);
@@ -90,10 +90,25 @@ namespace GeoSOT.xUnitTests
             var _tileUtils = new TileUtils();
 
             //Act
-            Action actual = () => _tileUtils.GetLon(input);
+            Action actual = () => _tileUtils.GetLng(input);
 
             //Assert
             Assert.Throws<ArgumentException>(actual);
+        }
+
+
+        [Theory]
+        [InlineData(12.345678, 12.345678)] // 12° 20' 44"
+        public void EncodeLat(double input, Int32 expected)
+        {
+            //Arrange
+            var _tileUtils = new TileUtils();
+
+            //Act
+            var actual = _tileUtils.EncodeLat(input);
+
+            //Assert
+            Assert.Equal(expected, actual);
         }
     }
 }

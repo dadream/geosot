@@ -6,6 +6,8 @@ namespace GeoSOT
 {
     public class TileUtils
     {
+        #region 度分秒转换
+
         /// <summary>
         /// 将十进制经纬度转换为DMS字符串表达，秒保留4位精度
         /// </summary>
@@ -38,25 +40,25 @@ namespace GeoSOT
         /// <summary>
         /// 纬度转换为度分秒
         /// </summary>
-        /// <param name="latitude">维度</param>
+        /// <param name="lat">维度</param>
         /// <returns>*度*分*秒</returns>
-        public string GetLatDMS(double latitude)
+        public string GetLatDMS(double lat)
         {
-            var dms = DecimalDgreeToDMS(latitude);
+            var dms = DecimalDgreeToDMS(lat);
             return string.Format("{0} {1}",
-                dms, latitude < 0 ? "S" : "N");
+                dms, lat < 0 ? "S" : "N");
         }
 
         /// <summary>
         /// 经度转换为度分秒
         /// </summary>
-        /// <param name="longitude">经度</param>
+        /// <param name="lng">经度</param>
         /// <returns>*度*分*秒</returns>
-        public string GetLongDMS(double longitude)
+        public string GetLngDMS(double lng)
         {
-            var dms = DecimalDgreeToDMS(longitude);
+            var dms = DecimalDgreeToDMS(lng);
             return string.Format("{0} {1}",
-                dms, longitude < 0 ? "W" : "E");
+                dms, lng < 0 ? "W" : "E");
         }
 
         /// <summary>
@@ -78,7 +80,7 @@ namespace GeoSOT
         /// </summary>
         /// <param name="dms"></param>
         /// <returns></returns>
-        public double GetLon(string dms)
+        public double GetLng(string dms)
         {
             var result = DMSToDecimalDgree(dms);
             if (dms.IndexOf("W") >= 0) { result = -result; }
@@ -87,12 +89,17 @@ namespace GeoSOT
             return result;
         }
 
+        #endregion
+
         public Int32 EncodeLat(double lat)
         {
             throw new NotImplementedException();
+            //var segs = new LngLatSegments(lat);
+
+            //return segs.G << 31 & segs.D << 23 & segs.M << 17 & segs.S << 11 & segs.S11;
         }
 
-        public Int32 EncodeLon(double lon)
+        public Int32 EncodeLng(double lng)
         {
             throw new NotImplementedException();
         }
@@ -102,7 +109,7 @@ namespace GeoSOT
             throw new NotImplementedException();
         }
 
-        public double DecodeLon(Int32 lonKey)
+        public double DecodeLng(Int32 lngKey)
         {
             throw new NotImplementedException();
         }
@@ -116,7 +123,7 @@ namespace GeoSOT
         /// <param name="lat"></param>
         /// <param name="lon"></param>
         /// <returns></returns>
-        public Int64 Get1DId(double lat, double lon)
+        public Int64 Get1DId(double lat, double lng)
         {
             throw new NotImplementedException();
         }
@@ -126,7 +133,7 @@ namespace GeoSOT
             throw new NotImplementedException();
         }
 
-        public Int32 GetLonId(Int64 quadKey)
+        public Int32 GetLngId(Int64 quadKey)
         {
             throw new NotImplementedException();
         }
