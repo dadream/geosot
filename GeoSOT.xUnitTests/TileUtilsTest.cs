@@ -96,7 +96,6 @@ namespace GeoSOT.xUnitTests
             Assert.Throws<ArgumentException>(actual);
         }
 
-
         [Theory]
         [InlineData(12.345678, 12.345678)] // 12° 20' 44"
         [InlineData(-12.345678, -12.345678)] // 12° 20' 44"
@@ -114,8 +113,8 @@ namespace GeoSOT.xUnitTests
         }
 
         [Theory]
-        [InlineData(12.345678, 12.345678)] // 12° 20' 44"
-        [InlineData(-12.345678, -12.345678)] // 12° 20' 44"
+        [InlineData(12.345678, 12)] // 12° 20' 44"
+        [InlineData(-12.345678, -12)] // 12° 20' 44"
         public void DecodeLngLat(double inputLat, double inputLng)
         {
             //Arrange
@@ -130,6 +129,23 @@ namespace GeoSOT.xUnitTests
             //Assert
             Assert.Equal(expectedLat, inputLat);
             Assert.Equal(expectedLng, inputLng);
+        }
+
+        [Theory]
+        [InlineData(1, 1, 1, "00")]
+        [InlineData(1, -1, 1, "01")]
+        [InlineData(-1, 1, 1, "02")]
+        [InlineData(-1, -1, 1, "03")]
+        public void GetLngLatCode(double inputLat, double inputLng, int inputLevel, string expected)
+        {
+            //Arrange
+            var _tileUtils = new TileUtils();
+
+            //Act
+            var actual = _tileUtils.GetLngLatCode(inputLat, inputLng, inputLevel);
+
+            //Assert
+            Assert.Equal(expected, actual);
         }
     }
 }

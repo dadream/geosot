@@ -116,7 +116,7 @@ namespace GeoSOT
             };
         }
 
-        
+
         public UInt64 EncodeLngLat(double lat, double lng)
         {
             var morton = new Morton2D();
@@ -137,23 +137,17 @@ namespace GeoSOT
 
         #endregion
 
-        /// <summary>
-        /// 北京世纪坛（39°54′37″N，116°18′54″E）
-        /// 第 9 级其剖分编码为（ 39,116 ）
-        /// 第 15 级为（ 39-54,116-18 ）
-        /// 第 21 级为（39-54-37,116-18-54）
-        /// </summary>
-        /// <param name="lat"></param>
-        /// <param name="lon"></param>
-        /// <returns></returns>
-        //public string GetLngLatCode(double x)
-        //{
-        //    var code = EncodeLngLat(x);
-        //    UInt32 G = code >> 31; // 1b
-        //    UInt32 D = (code >> 23) & 0xFF; // 8b
-        //    UInt32 M = (code >> 17) & 0x3F; // 6b
-        //    UInt32 S = (code >> 11) & 0x3F; // 6b
-        //    UInt32 S11 = code & 0x7FF; // 11b
-        //}
+        public string GetLngLatCode(double lat, double lng, int level)
+        {
+            var code = EncodeLngLat(lat, lng);
+            StringBuilder sb = new StringBuilder();
+            sb.Append("0");
+            for (int i = 31; i > 31 - level; i--)
+            {
+                var v = (code >> i * 2) & 0x3;
+                sb.Append(v);
+            }
+            return sb.ToString();
+        }
     }
 }
