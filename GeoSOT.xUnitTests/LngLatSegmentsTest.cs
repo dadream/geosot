@@ -10,7 +10,7 @@ namespace GeoSOT.xUnitTests
         [Theory]
         [InlineData(-12.345678, 1, 12, 20, 44, 902, 44.4408)]
         [InlineData(12.345678, 0, 12, 20, 44, 902, 44.4408)]
-        public void LngLatSegments(double input, int g, int d, int m,  int s, int s11, double seconds)
+        public void LngLatSegments(double input, UInt32 g, UInt32 d, UInt32 m, UInt32 s, UInt32 s11, double seconds)
         {
             //Arrange
             var _segmetns = new LngLatSegments(input);

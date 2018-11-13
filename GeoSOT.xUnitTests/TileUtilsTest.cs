@@ -98,15 +98,16 @@ namespace GeoSOT.xUnitTests
 
 
         [Theory]
-        [InlineData(1, 12)] // 12° 20' 44"
-        [InlineData(-1, 12)] // 12° 20' 44"
-        public void EncodeLat(double input, Int32 expected)
+        [InlineData(12.345678, 12.345678)] // 12° 20' 44"
+        [InlineData(-12.345678, -12.345678)] // 12° 20' 44"
+        public void EncodeDecodeLngLat(double input, double expected)
         {
             //Arrange
             var _tileUtils = new TileUtils();
 
             //Act
-            var actual = _tileUtils.EncodeLngLat(input);
+            var code = _tileUtils.EncodeLngLat(input);
+            var actual = _tileUtils.DecodeLngLat(code);
 
             //Assert
             Assert.Equal(expected, actual);

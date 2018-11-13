@@ -91,17 +91,28 @@ namespace GeoSOT
 
         #endregion
 
-
-
-        public Int32 EncodeLngLat(double lat)
+        public UInt32 EncodeLngLat(double x)
         {
-            var segs = new LngLatSegments(lat);
+            var segs = new LngLatSegments(x);
             return segs.G << 31 | segs.D << 23 | segs.M << 17 | segs.S << 11 | segs.S11;
         }
 
-        public double DecodeLat(Int32 latKey)
+        public double DecodeLngLat(UInt32 x)
         {
-            throw new NotImplementedException();
+            UInt32 G = x >> 31; // 1b
+            UInt32 D = (x >> 23) & 0xFF; // 8b
+            UInt32 M = (x >> 17) & 0x3F; // 6b
+            UInt32 S = (x >> 11) & 0x3F; // 6b
+            UInt32 S11 = x & 0x7FF; // 11b
+            var segs = new LngLatSegments
+            {
+                G = G,
+                D = D,
+                M = M,
+                S = S,
+                S11 = S11
+            };
+            return segs.Degree;
         }
 
         public double DecodeLng(Int32 lngKey)

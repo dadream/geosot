@@ -14,12 +14,12 @@ namespace GeoSOT
         /// <summary>
         /// 标识经纬度的正负，1 表示负，0表示正
         /// </summary>
-        public int G { get; set; }
-        public int D { get; set; }
-        public int M { get; set; }
+        public UInt32 G { get; set; }
+        public UInt32 D { get; set; }
+        public UInt32 M { get; set; }
         public double Seconds { get; set; }
-        public int S { get; set; }
-        public int S11 { get; set; } // 1/2048秒，2^11
+        public UInt32 S { get; set; }
+        public UInt32 S11 { get; set; } // 1/2048秒，2^11
 
         public double Degree
         {
@@ -35,17 +35,19 @@ namespace GeoSOT
             }
         }
 
+        public LngLatSegments() { }
+
         public LngLatSegments(double degree)
         {
-            G = degree < 0 ? 1 : 0;
+            G = (UInt32)(degree < 0 ? 1 : 0);
             var rd = Math.Abs(Math.Round(degree, DegreePresion));
-            D = (int)rd;
+            D = (UInt32)rd;
             var minutes = (rd - D) * 60;
-            M = (int)minutes;
+            M = (UInt32)minutes;
             Seconds = Math.Round((minutes - M) * 60, SecondPresion);
-            S = (int)Seconds;
+            S = (UInt32)Seconds;
             var dotSeconds = (Seconds - S) * 2048;
-            S11 = (int)dotSeconds;
+            S11 = (UInt32)dotSeconds;
         }
     }
 }
