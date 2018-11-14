@@ -141,11 +141,23 @@ namespace GeoSOT
         {
             var code = EncodeLngLat(lat, lng);
             StringBuilder sb = new StringBuilder();
-            sb.Append("0");
+            sb.Append("G");
             for (int i = 31; i > 31 - level; i--)
             {
                 var v = (code >> i * 2) & 0x3;
                 sb.Append(v);
+                if (i > 32 - level)
+                {
+                    if (i == 23 || i == 17)
+                    {
+                        sb.Append("-");
+                    }
+                    if (i == 11)
+                    {
+                        sb.Append(".");
+                    }
+                }
+
             }
             return sb.ToString();
         }

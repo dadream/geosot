@@ -10,6 +10,7 @@ namespace GeoSOT.xUnitTests
         [Theory]
         [InlineData(-12.345678, "12° 20' 44.4408\" S")]
         [InlineData(12.345678, "12° 20' 44.4408\" N")]
+        [InlineData(39.910278, "39° 54' 37\" N")]
         public void GetLatDMS(double input, string expected)
         {
             //Arrange
@@ -40,6 +41,7 @@ namespace GeoSOT.xUnitTests
         [Theory]
         [InlineData("12° 20' 44.4408\" S", -12.345678)]
         [InlineData("12° 20' 44.4408\" N", 12.345678)]
+        [InlineData("39° 54' 37\" N", 39.910278)]
         public void GetLat(string input, double expected)
         {
             //Arrange
@@ -80,7 +82,6 @@ namespace GeoSOT.xUnitTests
             //Assert
             Assert.Throws<ArgumentException>(actual);
         }
-
 
         [Theory]
         [InlineData("12° 20' 44.4408\" S")]
@@ -132,10 +133,10 @@ namespace GeoSOT.xUnitTests
         }
 
         [Theory]
-        [InlineData(1, 1, 1, "00")]
-        [InlineData(1, -1, 1, "01")]
-        [InlineData(-1, 1, 1, "02")]
-        [InlineData(-1, -1, 1, "03")]
+        [InlineData(1, 1, 1, "G0")]
+        [InlineData(1, -1, 1, "G1")]
+        [InlineData(-1, 1, 1, "G2")]
+        [InlineData(-1, -1, 1, "G3")]
         public void GetLngLatCode(double inputLat, double inputLng, int inputLevel, string expected)
         {
             //Arrange
@@ -147,5 +148,24 @@ namespace GeoSOT.xUnitTests
             //Assert
             Assert.Equal(expected, actual);
         }
+
+
+        [Theory]
+        [InlineData("39° 54' 37\" N, 116° 18' 54\" E", "G001310322")]
+        public void GetLngLat(string input, string expected)
+        {
+            //Arrange
+            var _tileUtils = new TileUtils();
+
+            //Act
+            var str = input.Split(",");
+            var lat = _tileUtils.GetLat(str[0]);
+            var lng = _tileUtils.GetLng(str[1]);
+            var actual = _tileUtils.GetLngLatCode(lat, lng, 9);
+
+            //Assert
+            Assert.Equal(expected, actual);
+        }
+
     }
 }

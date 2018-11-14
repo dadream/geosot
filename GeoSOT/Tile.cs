@@ -11,5 +11,10 @@ namespace GeoSOT
         public int Level { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
+
+        //public LngLatBbox GetBbox()
+        //{
+
+        //}
     }
 }
