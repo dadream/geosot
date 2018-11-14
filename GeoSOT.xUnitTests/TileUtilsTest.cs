@@ -10,7 +10,6 @@ namespace GeoSOT.xUnitTests
         [Theory]
         [InlineData(-12.345678, "12° 20' 44.4408\" S")]
         [InlineData(12.345678, "12° 20' 44.4408\" N")]
-        [InlineData(39.910278, "39° 54' 37\" N")]
         public void GetLatDMS(double input, string expected)
         {
             //Arrange
@@ -151,8 +150,10 @@ namespace GeoSOT.xUnitTests
 
 
         [Theory]
-        [InlineData("39° 54' 37\" N, 116° 18' 54\" E", "G001310322")]
-        public void GetLngLat(string input, string expected)
+        [InlineData("39° 54' 37.01\" N, 116° 18' 54.82\" E", 9, "G001310322")]
+        [InlineData("39° 54' 37.01\" N, 116° 18' 54.82\" E", 15, "G001310322-230230")]
+        [InlineData("39° 54' 37.01\" N, 116° 18' 54.82\" E", 21, "G001310322-230230-310312")]
+        public void GetLngLat(string input, int inputLevel, string expected)
         {
             //Arrange
             var _tileUtils = new TileUtils();
@@ -161,7 +162,7 @@ namespace GeoSOT.xUnitTests
             var str = input.Split(",");
             var lat = _tileUtils.GetLat(str[0]);
             var lng = _tileUtils.GetLng(str[1]);
-            var actual = _tileUtils.GetLngLatCode(lat, lng, 9);
+            var actual = _tileUtils.GetLngLatCode(lat, lng, inputLevel);
 
             //Assert
             Assert.Equal(expected, actual);

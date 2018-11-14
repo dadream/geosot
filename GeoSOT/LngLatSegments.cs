@@ -10,7 +10,7 @@ namespace GeoSOT
     public class LngLatSegments
     {
         public readonly int DegreePresion = 6;
-        public readonly int SecondPresion = 4;
+        public readonly int SecondPresion = 5;
         /// <summary>
         /// 标识经纬度的正负，1 表示负，0表示正
         /// </summary>

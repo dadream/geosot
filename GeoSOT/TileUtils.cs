@@ -13,7 +13,7 @@ namespace GeoSOT
         /// </summary>
         /// <param name="dd">十进制经纬度</param>
         /// <returns>dms字符串</returns>
-        private string DecimalDgreeToDMS(double dd, int precision = 4)
+        private string DecimalDgreeToDMS(double dd, int precision = 5)
         {
             var degrees = (int)dd;
             var minutes = (dd - degrees) * 60;
@@ -128,8 +128,8 @@ namespace GeoSOT
         public void DecodeLngLat(UInt64 code, ref double lat, ref double lng)
         {
             var morton = new Morton2D();
-            UInt32 L = 0;
-            UInt32 B = 0;
+            UInt32 L = 0; // 横轴
+            UInt32 B = 0; // 竖轴
             morton.Magicbits(code, ref L, ref B);
             lng = DecodeLngLat(L).Degree;
             lat = DecodeLngLat(B).Degree;
