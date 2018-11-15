@@ -31,27 +31,27 @@ namespace GeoSOT
         /// <summary>
         /// 标识经纬度的正负，1 表示负，0表示正
         /// </summary>
-        public UInt32 G { get; set; }
+        public UInt32 G { get; private set; }
         /// <summary>
         /// 是否为经度，经度为真，维度为假
         /// </summary>
-        public bool IsLng { get; set; }
+        public bool IsLng { get; private set; }
         /// <summary>
         /// 十进制度
         /// </summary>
-        public UInt32 D { get; set; }
+        public UInt32 D { get; private set; }
         /// <summary>
         /// 十进制分
         /// </summary>
-        public UInt32 M { get; set; }
+        public UInt32 M { get; private set; }
         /// <summary>
         /// 十进制秒
         /// </summary>
-        public UInt32 S { get; set; }
+        public UInt32 S { get; private set; }
         /// <summary>
         /// 十进制1/2048秒，2^11
         /// </summary>
-        public UInt32 S11 { get; set; }
+        public UInt32 S11 { get; private set; }
         /// <summary>
         /// 浮点数秒
         /// </summary>
@@ -105,6 +105,10 @@ namespace GeoSOT
 
         public LngLatSegments() { }
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="degree">经纬度</param>
         public LngLatSegments(double degree)
         {
             G = (UInt32)(degree < 0 ? 1 : 0);
@@ -118,6 +122,10 @@ namespace GeoSOT
             S11 = (UInt32)Math.Round(dotSeconds);
         }
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="dms">度分秒</param>
         public LngLatSegments(string dms)
         {
             var list = dms.Split(new char[] { '°', '\'', '\"' });

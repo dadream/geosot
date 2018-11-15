@@ -4,38 +4,44 @@ using System.Text;
 
 namespace GeoSOT
 {
+    /// <summary>
+    /// 经纬度
+    /// </summary>
     public class LngLat
     {
-        public double Lng { get; set; }
-        public double Lat { get; set; }
+        public LngLatSegments Lng { get; private set; }
+        public LngLatSegments Lat { get; private set; }
 
         public LngLat() { }
+
+        public LngLat(double lat, double lng)
+        {
+            this.Lat = new LngLatSegments(lat);
+            this.Lng = new LngLatSegments(lng);
+        }
 
         public LngLat(string dms)
         {
             var str = dms.Split(",");
-            var tileUtils = new TileUtils();
-            var lat = tileUtils.GetLat(str[0]);
-            var lng = tileUtils.GetLng(str[1]);
+            this.Lat = new LngLatSegments(str[0]);
+            this.Lng = new LngLatSegments(str[1]);
         }
 
-        public string Code
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="b">SOT角点二维编码下侧</param>
+        /// <param name="l">SOT角点二维编码左侧</param>
+        public LngLat(UInt32 b, UInt32 l)
         {
-            get
-            {
-                var utils = new TileUtils();
-                return string.Format("{0}, {1}",
-                    new LngLatSegments(this.Lat).ToString(),
-                    new LngLatSegments(this.Lng).ToString());
-            }
+            this.Lat = new LngLatSegments(b);
+            this.Lng = new LngLatSegments(l);
         }
 
         public override string ToString()
         {
-            var utils = new TileUtils();
             return string.Format("{0}, {1}",
-                utils.GetLatDMS(this.Lat),
-                utils.GetLngDMS(this.Lng));
+                this.Lat.DMS, this.Lng.DMS);
         }
     }
 }
