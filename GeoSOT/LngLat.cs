@@ -9,6 +9,16 @@ namespace GeoSOT
         public double Lng { get; set; }
         public double Lat { get; set; }
 
+        public LngLat() { }
+
+        public LngLat(string dms)
+        {
+            var str = dms.Split(",");
+            var tileUtils = new TileUtils();
+            var lat = tileUtils.GetLat(str[0]);
+            var lng = tileUtils.GetLng(str[1]);
+        }
+
         public string Code
         {
             get

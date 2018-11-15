@@ -20,21 +20,5 @@ namespace GeoSOT.xUnitTests
             //Assert
             Assert.Equal(expected, actual);
         }
-
-        [Theory]
-        [InlineData(-12.345678, 12.345678, "-12-20-44, 12-20-44")]
-        public void GetCode(double inputLat, double inputLng, string expected)
-        {
-            //Arrange
-            var lngLat = new LngLat { Lat = inputLat, Lng = inputLng };
-
-            //Act
-            var actual = lngLat.Code;
-
-            //Assert
-            Assert.Equal(expected, actual);
-        }
-
-
     }
 }

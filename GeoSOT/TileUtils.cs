@@ -137,6 +137,18 @@ namespace GeoSOT
 
         #endregion
 
+        public UInt32 GetL(double lng, int level)
+        {
+            var L = EncodeLngLat(lng);
+            return L >> (31-level);
+        }
+
+        public UInt32 GetB(double lat, int level)
+        {
+            var B = EncodeLngLat(lat);
+            return B >> (31 - level);
+        }
+
         public string GetLngLatCode(double lat, double lng, int level)
         {
             var code = EncodeLngLat(lat, lng);

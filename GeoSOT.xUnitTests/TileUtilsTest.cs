@@ -167,6 +167,5 @@ namespace GeoSOT.xUnitTests
             //Assert
             Assert.Equal(expected, actual);
         }
-
     }
 }
