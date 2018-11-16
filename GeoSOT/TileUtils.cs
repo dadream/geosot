@@ -99,24 +99,6 @@ namespace GeoSOT
             return segs.G << 31 | segs.D << 23 | segs.M << 17 | segs.S << 11 | segs.S11;
         }
 
-        public LngLatSegments DecodeLngLat(UInt32 x)
-        {
-            UInt32 G = x >> 31; // 1b
-            UInt32 D = (x >> 23) & 0xFF; // 8b
-            UInt32 M = (x >> 17) & 0x3F; // 6b
-            UInt32 S = (x >> 11) & 0x3F; // 6b
-            UInt32 S11 = x & 0x7FF; // 11b
-            return new LngLatSegments
-            {
-                G = G,
-                D = D,
-                M = M,
-                S = S,
-                S11 = S11
-            };
-        }
-
-
         public UInt64 EncodeLngLat(double lat, double lng)
         {
             var morton = new Morton2D();
@@ -131,8 +113,8 @@ namespace GeoSOT
             UInt32 L = 0; // 横轴
             UInt32 B = 0; // 竖轴
             morton.Magicbits(code, ref L, ref B);
-            lng = DecodeLngLat(L).Degree;
-            lat = DecodeLngLat(B).Degree;
+            lng = new LngLatSegments(L, true).Degree;
+            lat = new LngLatSegments(B, false).Degree;
         }
 
         #endregion

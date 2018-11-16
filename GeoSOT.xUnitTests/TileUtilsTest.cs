@@ -106,7 +106,7 @@ namespace GeoSOT.xUnitTests
 
             //Act
             var code = _tileUtils.EncodeLngLat(input);
-            var actual = _tileUtils.DecodeLngLat(code).Degree;
+            var actual = new LngLatSegments(code).Degree;
 
             //Assert
             Assert.Equal(expected, actual);
