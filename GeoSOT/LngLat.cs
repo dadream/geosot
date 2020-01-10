@@ -34,8 +34,8 @@ namespace GeoSOT
         /// <param name="l">SOT角点二维编码左侧</param>
         public LngLat(UInt32 b, UInt32 l)
         {
-            this.Lat = new LngLatSegments(b);
-            this.Lng = new LngLatSegments(l);
+            this.Lat = new LngLatSegments(b, false);
+            this.Lng = new LngLatSegments(l, true);
         }
 
         public override string ToString()

@@ -6,7 +6,7 @@ namespace GeoSOT
 {
     public class Tile
     {
-        private LngLat Corner { get; set; }
+        public LngLat Corner { get; private set; }
 
         public ulong Id
         {
@@ -31,7 +31,7 @@ namespace GeoSOT
         {
             get
             {
-                return this.Corner.Lng.Code >> (31 - Level);
+                return this.Corner.Lng.Code >> (32 - Level);
             }
         }
 
@@ -42,7 +42,7 @@ namespace GeoSOT
         {
             get
             {
-                return this.Corner.Lat.Code >> (31 - Level);
+                return this.Corner.Lat.Code >> (32 - Level);
             }
         }
 
@@ -55,6 +55,30 @@ namespace GeoSOT
         {
             this.Level = l;
             this.Corner = new LngLat(dms);
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="l"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public Tile(int l, int x, int y)
+        {
+            var lngCode = x << (32 - l);
+            var latCode = y << (32 - l);
+            this.Level = l;
+            this.Corner = new LngLat((uint)latCode, (uint)lngCode);
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="code"></param>
+        public Tile(string code)
+        {
+            this.Level = code.Length - 1;
+            throw new NotImplementedException();
         }
 
         /// <summary>
