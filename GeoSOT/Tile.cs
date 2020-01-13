@@ -46,6 +46,34 @@ namespace GeoSOT
             }
         }
 
+
+        /// <summary>
+        /// 角点经度
+        /// </summary>
+        public double CornerLng
+        {
+            get
+            {
+                var LCode = this.X << (32 - Level);
+                var L = new LngLatSegments(LCode, true);
+                return L.Degree;
+            }
+        }
+
+        /// <summary>
+        /// 角点维度
+        /// </summary>
+        public double CornerLat
+        {
+            get
+            {
+                var BCode = this.Y << (32 - Level);
+                var B = new LngLatSegments(this.Corner.Lat.Code >> (32 - Level) << (32 - Level), false);
+                return B.Degree;
+            }
+        }
+
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -63,12 +91,12 @@ namespace GeoSOT
         /// <param name="l"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public Tile(int l, int x, int y)
+        public Tile(int l, uint x, uint y)
         {
             var lngCode = x << (32 - l);
             var latCode = y << (32 - l);
             this.Level = l;
-            this.Corner = new LngLat((uint)latCode, (uint)lngCode);
+            this.Corner = new LngLat(latCode, lngCode);
         }
 
         /// <summary>
@@ -89,29 +117,16 @@ namespace GeoSOT
         {
             var cellSize = new CellSize();
             var cell = cellSize.GetCellSizeInDegree(Level);
-            var L = new LngLatSegments(this.Corner.Lng.Code >> (32 - Level) << (32 - Level), true);
-            var B = new LngLatSegments(this.Corner.Lat.Code >> (32 - Level) << (32 - Level), false);
-            var bbox = new LngLatBbox();
-            if (L.G == 1)
+
+            var trtile = new Tile(this.Level, this.X + 1, this.Y + 1);
+            var bbox = new LngLatBbox
             {
-                bbox.East = L.Degree;
-                bbox.West = bbox.East - cell;
-            }
-            else
-            {
-                bbox.West = L.Degree;
-                bbox.East = bbox.West + cell;
-            }
-            if (B.G == 1)
-            {
-                bbox.North = B.Degree;
-                bbox.South = bbox.North - cell;
-            }
-            else
-            {
-                bbox.South = B.Degree;
-                bbox.North = bbox.South + cell;
-            }
+                West = Math.Min(this.CornerLng, trtile.CornerLng),
+                South = Math.Min(this.CornerLat, trtile.CornerLat),
+                East = Math.Max(this.CornerLng, trtile.CornerLng),
+                North = Math.Max(this.CornerLat, trtile.CornerLat),
+            };
+
             return bbox;
         }
 

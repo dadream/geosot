@@ -10,7 +10,9 @@ namespace GeoSOT
     public class LngLatSegments
     {
         public readonly int DegreePresion = 6;
-        public readonly int SecondPresion = 4;
+        public readonly int SecondPresion = 4; // 1/2048=0.48828125e-3
+                                               // 相对精度定义秒保留4位精度
+                                               // 如采用编码绝对精度，则需准确到小数点后11位
 
         private Dictionary<string, bool> LngDic = new Dictionary<string, bool>
         {
