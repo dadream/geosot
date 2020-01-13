@@ -96,7 +96,7 @@ namespace ConsoleApp1
             foreach (var line in File.ReadAllLines(tileFile))
             {
                 var arr = line.Split(',');
-                var tile = new Tile(int.Parse(arr[0]), int.Parse(arr[1]), int.Parse(arr[2]));
+                var tile = new Tile(int.Parse(arr[0]), uint.Parse(arr[1]), uint.Parse(arr[2]));
                 var lat = tile.Corner.Lat.D;
                 var lon = tile.Corner.Lng.D;
                 for (var row = 0; row < 60; row++)
