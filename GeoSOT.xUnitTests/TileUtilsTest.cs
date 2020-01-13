@@ -99,18 +99,35 @@ namespace GeoSOT.xUnitTests
         [Theory]
         [InlineData(12.345678, 12.345678)] // 12° 20' 44"
         [InlineData(-12.345678, -12.345678)] // 12° 20' 44"
-        public void EncodeDecodeLngLat(double input, double expected)
+        public void EncodeDecodeLng(double input, double expected)
         {
             //Arrange
             var _tileUtils = new TileUtils();
 
             //Act
             var code = _tileUtils.EncodeLngLat(input);
-            var actual = new LngLatSegments(code).Degree;
+            var actual = new LngLatSegments(code, true).Degree;
 
             //Assert
             Assert.Equal(expected, actual);
         }
+
+        [Theory]
+        [InlineData(12.345678, 12.345678)] // 12° 20' 44"
+        [InlineData(-12.345678, -12.345678)] // 12° 20' 44"
+        public void EncodeDecodeLat(double input, double expected)
+        {
+            //Arrange
+            var _tileUtils = new TileUtils();
+
+            //Act
+            var code = _tileUtils.EncodeLngLat(input);
+            var actual = new LngLatSegments(code, false).Degree;
+
+            //Assert
+            Assert.Equal(expected, actual);
+        }
+
 
         [Theory]
         [InlineData(12.345678, 12)] // 12° 20' 44"

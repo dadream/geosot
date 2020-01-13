@@ -32,7 +32,7 @@ namespace GeoSOT
         /// </summary>
         /// <param name="b">SOT角点二维编码下侧</param>
         /// <param name="l">SOT角点二维编码左侧</param>
-        public LngLat(UInt32 b, UInt32 l)
+        public LngLat(uint b, uint l)
         {
             this.Lat = new LngLatSegments(b, false);
             this.Lng = new LngLatSegments(l, true);

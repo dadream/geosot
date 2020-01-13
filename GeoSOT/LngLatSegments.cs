@@ -33,7 +33,7 @@ namespace GeoSOT
         /// <summary>
         /// 标识经纬度的正负，1 表示负，0表示正
         /// </summary>
-        public UInt32 G { get; private set; }
+        public uint G { get; private set; }
         /// <summary>
         /// 是否为经度，经度为真，维度为假
         /// </summary>
@@ -41,19 +41,19 @@ namespace GeoSOT
         /// <summary>
         /// 十进制度
         /// </summary>
-        public UInt32 D { get; private set; }
+        public uint D { get; private set; }
         /// <summary>
         /// 十进制分
         /// </summary>
-        public UInt32 M { get; private set; }
+        public uint M { get; private set; }
         /// <summary>
         /// 十进制秒
         /// </summary>
-        public UInt32 S { get; private set; }
+        public uint S { get; private set; }
         /// <summary>
         /// 十进制1/2048秒，2^11
         /// </summary>
-        public UInt32 S11 { get; private set; }
+        public uint S11 { get; private set; }
         /// <summary>
         /// 浮点数秒
         /// </summary>
@@ -97,7 +97,7 @@ namespace GeoSOT
         /// <summary>
         /// 经纬度1d编码
         /// </summary>
-        public UInt32 Code
+        public uint Code
         {
             get
             {
@@ -113,15 +113,15 @@ namespace GeoSOT
         /// <param name="degree">经纬度</param>
         public LngLatSegments(double degree)
         {
-            G = (UInt32)(degree < 0 ? 1 : 0);
+            G = (uint)(degree < 0 ? 1 : 0);
             var rd = Math.Abs(Math.Round(degree, DegreePresion));
-            D = (UInt32)rd;
+            D = (uint)rd;
             var minutes = (rd - D) * 60;
-            M = (UInt32)minutes;
+            M = (uint)minutes;
             var seconds = Math.Round((minutes - M) * 60, SecondPresion);
-            S = (UInt32)seconds;
+            S = (uint)seconds;
             var dotSeconds = (seconds - S) * 2048;
-            S11 = (UInt32)Math.Round(dotSeconds);
+            S11 = (uint)Math.Round(dotSeconds);
         }
 
         /// <summary>
@@ -131,12 +131,12 @@ namespace GeoSOT
         public LngLatSegments(string dms)
         {
             var list = dms.Split(new char[] { '°', '\'', '\"' });
-            D = UInt32.Parse(list[0].Trim(' '));
-            M = UInt32.Parse(list[1].Trim(' '));
+            D = uint.Parse(list[0].Trim(' '));
+            M = uint.Parse(list[1].Trim(' '));
             var seconds = double.Parse(list[2].Trim(' '));
-            S = (UInt32)seconds;
+            S = (uint)seconds;
             var dotSeconds = (seconds - S) * 2048;
-            S11 = (UInt32)Math.Round(dotSeconds);
+            S11 = (uint)Math.Round(dotSeconds);
             var half = list[3].Trim(' ');
             if (half == "S" || half == "W") { G = 1; }
             else if (half == "N" || half == "E") { }
@@ -149,7 +149,7 @@ namespace GeoSOT
         /// </summary>
         /// <param name="x">2d编码</param>
         /// <param name="isL"></param>
-        public LngLatSegments(UInt32 x, bool isL)
+        public LngLatSegments(uint x, bool isL)
         {
             IsLng = isL;
             G = x >> 31; // 1b

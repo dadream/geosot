@@ -93,13 +93,13 @@ namespace GeoSOT
 
         #region 经纬度与1d/2d编码转换
 
-        public UInt32 EncodeLngLat(double x)
+        public uint EncodeLngLat(double x)
         {
             var segs = new LngLatSegments(x);
             return segs.G << 31 | segs.D << 23 | segs.M << 17 | segs.S << 11 | segs.S11;
         }
 
-        public UInt64 EncodeLngLat(double lat, double lng)
+        public ulong EncodeLngLat(double lat, double lng)
         {
             var morton = new Morton2D();
             var L = EncodeLngLat(lng);
@@ -107,11 +107,11 @@ namespace GeoSOT
             return morton.Magicbits(L, B);
         }
 
-        public void DecodeLngLat(UInt64 code, ref double lat, ref double lng)
+        public void DecodeLngLat(ulong code, ref double lat, ref double lng)
         {
             var morton = new Morton2D();
-            UInt32 L = 0; // 横轴
-            UInt32 B = 0; // 竖轴
+            uint L = 0; // 横轴
+            uint B = 0; // 竖轴
             morton.Magicbits(code, ref L, ref B);
             lng = new LngLatSegments(L, true).Degree;
             lat = new LngLatSegments(B, false).Degree;
@@ -119,13 +119,13 @@ namespace GeoSOT
 
         #endregion
 
-        public UInt32 GetL(double lng, int level)
+        public uint GetL(double lng, int level)
         {
             var L = EncodeLngLat(lng);
             return L >> (31-level);
         }
 
-        public UInt32 GetB(double lat, int level)
+        public uint GetB(double lat, int level)
         {
             var B = EncodeLngLat(lat);
             return B >> (31 - level);
