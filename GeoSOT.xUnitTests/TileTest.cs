@@ -35,5 +35,19 @@ namespace GeoSOT.xUnitTests
             Assert.Equal(expected, actual);
         }
 
+        [Theory]
+        [InlineData("G001110221-021123", "15 7245 403")]
+        public void TileDecode1DString(string input, string expected)
+        {
+            //Arrange
+            var _tile = new Tile(input);
+
+            //Act
+            var actual = string.Format("{0} {1} {2}", _tile.Level, _tile.X, _tile.Y);
+
+            //Assert
+            Assert.Equal(expected, actual);
+        }
+
     }
 }

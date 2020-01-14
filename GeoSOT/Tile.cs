@@ -118,7 +118,7 @@ namespace GeoSOT
                 {
                     var v = DecodeChar(c);
                     var shift = ((31 - level) * 2);
-                    id = id & ((ulong)v << shift);
+                    id = id | ((ulong)v << shift);
                     level++;
                 }
             }
