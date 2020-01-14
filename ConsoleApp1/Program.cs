@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace ConsoleApp1
 {
@@ -25,9 +26,12 @@ namespace ConsoleApp1
             // ExportCsv(tiles, batfile);
             // ExportGeoJSON(tiles, batfile);
 
-            var tileFile = @"E:\grid_data\sot_1dchina1.csv";
-            var tiles = GetSpliteTiles(tileFile);
-            ExportGeoJSON(tiles, batfile);
+            //var tileFile = @"E:\grid_data\sot_1dchina1.csv";
+            //var tiles = GetSpliteTiles(tileFile);
+            //ExportGeoJSON(tiles, batfile);
+
+            var infile = @"E:\road_stat\sot_grid\1m.csv";
+            GetParentTiles(infile);
         }
 
         static void ExportCsv(IEnumerable<Tile> tiles, string csvFile)
@@ -70,7 +74,7 @@ namespace ConsoleApp1
             return cmd;
         }
 
-
+        
         static void ExportGeoJSON(IEnumerable<Tile> tiles, string jsonFile)
         {
             int i = 0;
@@ -113,6 +117,62 @@ namespace ConsoleApp1
                         //yield return new Tile(g3Corner, 9);
                     }
                 }
+            }
+        }
+
+        static void GetParentTiles(string tileFile)
+        {
+            var lines = File.ReadAllLines(tileFile);
+            var sots = lines.Select(p => p.Replace("-", "")).ToList();
+            for (int i = 14; i >=0; i--)
+            {
+                var level = i;
+                sots = sots.Select(p => p.Substring(0, p.Length -1)).Distinct().ToList();
+                var d = "";
+                if (i > 9)
+                {
+                    d = (int)Math.Pow(2, 15 - i) + "m";
+                }
+                else
+                {
+                    d = (int)Math.Pow(2, 9 - i) + "d";
+                }
+                var csvFile = @"E:\road_stat\sot_grid\sot_" + d + "china.csv";
+                using (var fs = new FileStream(csvFile, FileMode.Create))
+                {
+                    using (var sw = new StreamWriter(fs))
+                    {
+                        foreach (var tile in sots)
+                        {
+                            sw.WriteLine(tile);
+                            //Console.WriteLine(tile);
+                        }
+                    }
+                }
+
+            }
+        }
+
+
+        static void GetParentGeoJSONs(string tileFile)
+        {
+            var lines = File.ReadAllLines(tileFile);
+            var sots = lines.Select(p => p.Replace("-", "")).ToList();
+            for (int i = 14; i >= 0; i--)
+            {
+                var level = i;
+                sots = sots.Select(p => p.Substring(0, p.Length - 1)).Distinct().ToList();
+                var d = "";
+                if (i > 9)
+                {
+                    d = (int)Math.Pow(2, 15 - i) + "m";
+                }
+                else
+                {
+                    d = (int)Math.Pow(2, 9 - i) + "d";
+                }
+                var jsonFile = @"E:\road_stat\sot_grid\sot_" + d + "china.json";
+                ExportGeoJSON(sots.Select(p=>new Tile(p)), jsonFile);
             }
         }
 
