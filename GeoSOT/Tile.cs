@@ -6,8 +6,13 @@ namespace GeoSOT
 {
     public class Tile
     {
+        /// <summary>
+        /// 分块近原点的角点
+        /// </summary>
         public LngLat Corner { get; private set; }
-
+        /// <summary>
+        /// 一维编码
+        /// </summary>
         public ulong Id
         {
             get
@@ -20,7 +25,7 @@ namespace GeoSOT
         }
 
         /// <summary>
-        /// 层级
+        /// 层号
         /// </summary>
         public int Level { get; private set; }
 
@@ -61,7 +66,7 @@ namespace GeoSOT
         }
 
         /// <summary>
-        /// 角点维度
+        /// 角点纬度
         /// </summary>
         public double CornerLat
         {
@@ -88,9 +93,9 @@ namespace GeoSOT
         /// <summary>
         /// 构造函数
         /// </summary>
-        /// <param name="l"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
+        /// <param name="l">层号</param>
+        /// <param name="x">列号</param>
+        /// <param name="y">行号</param>
         public Tile(int l, uint x, uint y)
         {
             var lngCode = x << (32 - l);
@@ -102,11 +107,36 @@ namespace GeoSOT
         /// <summary>
         /// 构造函数
         /// </summary>
-        /// <param name="code"></param>
+        /// <param name="code">SOT一维编码</param>
         public Tile(string code)
         {
-            this.Level = code.Length - 1;
-            throw new NotImplementedException();
+            ulong id = 0L;
+            var level = 0;
+            foreach (var c in code)
+            {
+                if (char.IsDigit(c))
+                {
+                    var v = DecodeChar(c);
+                    var shift = ((31 - level) * 2);
+                    id = id & ((ulong)v << shift);
+                    level++;
+                }
+            }
+
+            var morton = new Morton2D();
+            uint l = 0;
+            uint b = 0;
+            morton.Magicbits(id, ref l, ref b);
+            this.Level = level;
+            this.Corner = new LngLat(b, l);
+        }
+
+        private static byte DecodeChar(char c)
+        {
+            if (c == '1') return 1;
+            if (c == '2') return 2;
+            if (c == '3') return 3;
+            return 0;
         }
 
         /// <summary>
@@ -131,7 +161,7 @@ namespace GeoSOT
         }
 
         /// <summary>
-        /// 四进制编码
+        /// 一维编码字符串
         /// </summary>
         /// <returns></returns>
         public override string ToString()
@@ -158,5 +188,6 @@ namespace GeoSOT
             }
             return sb.ToString();
         }
+
     }
 }
