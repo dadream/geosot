@@ -1,4 +1,4 @@
-﻿该库提供了GeoSOT[1]球面经纬度剖分Tile的编码/解码算法实现.
+﻿# 该库提供了**GeoSOT**_[^1]_球面经纬度剖分Tile的编码/解码算法实现.
 
 功能特性：
 
@@ -12,15 +12,13 @@
 
 5 支持剖分块层、行、列号计算。
 
-示例 1： 从DMS经纬度构建Tile对象
-
-var dms = "39° 54' 37.0098\" N, 116° 18' 54.8198\" E";
-
-var _tile = new Tile(dms, 15);
-
-Console.WriteLine(_tile.ToString());
-
+示例 1： 从DMS经纬度构建Tile对象  
+```csharp
+var dms = "39° 54' 37.0098\" N, 116° 18' 54.8198\" E";  
+var _tile = new Tile(dms, 15);  
+Console.WriteLine(_tile.ToString());  
 // print G001310322-230230
+```
 
 示例 2： 从编码构建Tile对象
 
@@ -67,4 +65,4 @@ Console.WriteLine(_tile.Y);
 
 // print 15 7442 2550
 
-[1] 论文引用:GeoSOT：基于2^n及整型一维数组的全球经纬度剖分网格(Geo-graphical coordinates subdividing grid with one dimension integral coding on 2n-Tree)
+_[1] 论文引用:GeoSOT：基于2^n及整型一维数组的全球经纬度剖分网格(Geo-graphical coordinates subdividing grid with one dimension integral coding on 2n-Tree)_
